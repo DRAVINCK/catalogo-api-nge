@@ -37,7 +37,14 @@ class UsuarioController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $usuario = Usuario::find($id);
+        return view('usuario.show' , compact('usuario'));
+    }
+
+    public function edit(string $id)
+    {
+        $usuario = Usuario::find($id);
+        return view('usuario.edit' , compact('usuario'));
     }
 
     /**
@@ -45,7 +52,8 @@ class UsuarioController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        Usuario::find($id)->update($request->except('_token'));
+        return to_route('usuarios.index');
     }
 
     /**
@@ -53,6 +61,8 @@ class UsuarioController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Usuario::destroy($id);
+        return to_route('usuarios.index');
+
     }
 }

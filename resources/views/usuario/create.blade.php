@@ -1,4 +1,4 @@
-<x-layout Titulo="Criação de Usuário">
+<x-layout titulo="Criação de Usuário">
     <div class="d-flex justify-content-end m-3 ">
         <a class="btn btn-sm btn-danger" href="{{route('usuarios.index')}}">Sair</a>
     </div>

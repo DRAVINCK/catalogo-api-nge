@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Usuario extends Model
 {
     protected $fillable = [
+        '_token',
         'nome',
         'email',
         'telefone'
     ];
-
 
 }

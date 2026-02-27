@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Usuario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use function Symfony\Component\Translation\t;
 
 class UsuarioController extends Controller
 {
@@ -26,6 +28,8 @@ class UsuarioController extends Controller
      */
     public function store(Request $request)
     {
+        Usuario::create($request->except('_token'));
+        return to_route('usuarios.index');
     }
 
     /**

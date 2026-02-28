@@ -19,5 +19,5 @@
             @endforeach
         </ul>
     </div>
-</x-layout>
+</x-layout>s
 

@@ -1,4 +1,4 @@
-<x-layout titulo="Editar de cadastro">
+<x-layout titulo="Editar de usuario">
     <div class="d-flex justify-content-end m-3 ">
         <a class="btn btn-sm btn-danger" href="{{route('usuarios.index')}}">Sair</a>
     </div>

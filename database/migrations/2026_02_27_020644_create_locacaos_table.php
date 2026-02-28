@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('locacaos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('usuario_id');
-            $table->foreignId('livro_id');
             $table->date('data_emissao');
             $table->date('data_vencimento');
+            $table->unsignedBigInteger('usuario_id');
+            $table->unsignedBigInteger('livro_id');
+            $table->foreign('usuario_id')->references('id')->on('usuarios');
+            $table->foreign('livro_id')->references('id')->on('livros');
             $table->timestamps();
         });
     }

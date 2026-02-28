@@ -13,4 +13,8 @@ class Usuario extends Model
         'telefone'
     ];
 
+    public function locacao(){
+        return $this->belongsTo('App\Models\Locacao');
+    }
+
 }

@@ -13,4 +13,12 @@ class locacao extends Model
         'data_emissao',
         'data_vencimento',
     ];
+
+    public function usuario(){
+        return $this->belongsTo('App\Models\Usuario');
+    }
+
+    public function livro(){
+        return $this->belongsTo('App\Models\Livro');
+    }
 }

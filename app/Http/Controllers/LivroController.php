@@ -26,7 +26,7 @@ class LivroController extends Controller
      */
     public function store(Request $request)
     {
-        Livro::create(request()->except('_token'));
+        Livro::create($request->except('_token'));
         return to_route("livros.index");
     }
 

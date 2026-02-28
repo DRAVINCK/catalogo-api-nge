@@ -15,4 +15,8 @@ class Livro extends Model
         'categoria',
         'qtd_estoque'
     ];
+
+    public function locacao(){
+        return $this->belongsTo('App\Models\Locacao');
+    }
 }

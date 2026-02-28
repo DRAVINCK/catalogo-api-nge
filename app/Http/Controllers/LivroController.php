@@ -10,9 +10,20 @@ class LivroController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $livros = Livro::all();
+        $searchCondicao = $request->input('search');
+        $filtro = $request->input('filtro');
+
+        $query = Livro::query();
+
+        if ($searchCondicao) {
+            $query->where($filtro, 'like', "%{$searchCondicao}%");
+
+        }
+
+        $livros = $query->get();
+
         return view('livro.index', compact('livros'));
     }
 

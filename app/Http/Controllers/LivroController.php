@@ -50,12 +50,19 @@ class LivroController extends Controller
         return view('livro.show', compact('livro'));
     }
 
+    public function edit(string $id)
+    {
+        $livro = Livro::find($id);
+        return view('livro.edit' , compact('livro'));
+    }
+
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        Livro::find($id)->update($request->except('_token'));
+        return to_route('livros.index');
     }
 
     /**
@@ -63,6 +70,7 @@ class LivroController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Livro::destroy($id);
+        return to_route('livros.index');
     }
 }

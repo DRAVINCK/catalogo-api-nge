@@ -6,6 +6,7 @@ use App\Models\Livro;
 use App\Models\locacao;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class LocacaoController extends Controller
@@ -36,7 +37,19 @@ class LocacaoController extends Controller
      */
     public function store(Request $request)
     {
+        $livro = Livro::find($request->input('livro_id'));
+        if ($livro->qtd_estoque <= 0) {
+            return redirect()->back()
+                ->with(['error', 'Livro indisponível para locação.'])
+                ->withInput();
+
+        }
+
         locacao::create($request->except('_token'));
+        $livro->qtd_estoque -= 1;
+        $livro->total_locacoes += 1;
+        $livro->save();
+
         return to_route("locacoes.index");
     }
 
@@ -45,7 +58,8 @@ class LocacaoController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $locacao = locacao::find($id);
+        return view('locacao.show', compact('locacao'));
     }
 
     /**
@@ -53,7 +67,10 @@ class LocacaoController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $locacao = locacao::findOrFail($id);
+        $usuarios = Usuario::all();
+        $livros = Livro::all();
+        return view('locacao.edit', compact('locacao', 'usuarios', 'livros'));
     }
 
     /**
@@ -61,7 +78,8 @@ class LocacaoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        locacao::find($id)->update($request->except('_token'));
+        return to_route('locacoes.index');
     }
 
     /**
@@ -69,6 +87,17 @@ class LocacaoController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $locacao = locacao::find($id);
+        $livro = Livro::find($locacao->livro_id);
+        $livro->qtd_estoque += 1;
+        $livro->save();
+        locacao::destroy($id);
+        return to_route('locacoes.index');
+    }
+
+    public function relatorio(){
+        $livros = Livro::all();
+        $maislocados = Livro::orderBy('total_locacoes', 'desc')->take(5)->get();
+        return view('locacao.relatorio', compact('maislocados', 'livros'));
     }
 }

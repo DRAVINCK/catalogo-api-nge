@@ -18,3 +18,4 @@ Route::resource('usuarios', UsuarioController::class);
 Route::resource('livros', LivroController::class);
 
 Route::resource('locacoes', LocacaoController::class);
+

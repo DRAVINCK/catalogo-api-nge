@@ -1,4 +1,4 @@
-<x-layout titulo="Editar de usuario">
+<x-layout titulo="Editar Usuario">
     <div class="d-flex justify-content-end m-3 ">
         <a class="btn btn-sm btn-danger" href="{{route('usuarios.index')}}">Sair</a>
     </div>
@@ -6,7 +6,7 @@
         <form class="form mt-4" action="{{route('usuarios.update', $usuario->id)}}" method="post">
             @csrf
             @method('PUT')
-            <input value="{{ $usuario->name }}"
+            <input value="{{ $usuario->nome }}"
                    placeholder="Digite o Nome"
                    autocomplete="off"
                    type="text"

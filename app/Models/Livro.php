@@ -13,7 +13,8 @@ class Livro extends Model
         'autor',
         'ano_publicacao',
         'categoria',
-        'qtd_estoque'
+        'qtd_estoque',
+        'total_locacoes'
     ];
 
     public function locacao(){

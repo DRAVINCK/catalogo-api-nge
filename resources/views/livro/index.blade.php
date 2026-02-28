@@ -16,19 +16,12 @@
                 Buscar
             </button>
         </form>
-        <ul>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mt-4">
             @foreach($livros as $livro)
-                <li class="border p-2 rounded m-1">
-                    Titulo: {{$livro->titulo}} | Categoria: {{$livro->categoria}} | Autor: {{$livro->autor}}
-                    <a class="btn btn-sm btn-primary" href="{{route('livros.show', $livro->id ) }}">Ver</a>
-                    <a class="btn btn-sm btn-warning" href="{{route('livros.edit', $livro->id ) }}">Editar</a>
-                    <form action="{{route('livros.destroy', $livro->id )}}" method="post">
-                        @csrf
-                        @method('DELETE')
-                        <button class="btn btn-sm btn-danger" type="submit">Excluir</button>
-                    </form>
-                </li>
+                <div class="col">
+                    <x-card-livro :livro="$livro" />
+                </div>
             @endforeach
-        </ul>
+        </div>
     </div>
 </x-layout>

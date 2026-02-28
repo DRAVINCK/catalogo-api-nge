@@ -14,6 +14,11 @@ class locacao extends Model
         'data_vencimento',
     ];
 
+    protected $casts = [
+        'data_emissao' => 'date',
+        'data_vencimento' => 'date',
+    ];
+
     public function usuario(){
         return $this->belongsTo('App\Models\Usuario');
     }

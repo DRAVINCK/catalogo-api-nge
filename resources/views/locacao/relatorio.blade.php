@@ -12,7 +12,7 @@
                 @foreach($maislocados as $livro)
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         {{ $livro->titulo }}
-                        <span class="badge bg-primary rounded">{{ $livro->total_locacoes }} locacoes</span>
+                        <span class="badge bg-primary rounded"> Quantidade locado: {{ $livro->total_locacoes }} </span>
                     </li>
                 @endforeach
             </ul>

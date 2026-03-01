@@ -3,7 +3,7 @@
         <a class="btn btn-sm btn-danger" href="{{route('livros.index')}}">Sair</a>
     </div>
     <div class="d-flex container">
-        <form class="form mt-4" action="{{route('livros.store')}}" method="post">
+        <form class="form mt-4" action="{{route('livros.store')}}" method="post" enctype="multipart/form-data">
             @csrf
             <h1>Criar Livro</h1>
             <input placeholder="Informe um ISBN" autocomplete="off" type="text" name="ISBN" class="form-control mt-3">

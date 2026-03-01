@@ -12,6 +12,7 @@
             <input placeholder="Ano de Publicação" autocomplete="off" type="text" name="ano_publicacao" class="form-control mt-3">
             <input placeholder="Informe a Categoria" autocomplete="off" type="text" name="categoria" class="form-control mt-3">
             <input placeholder="Informe Quantidade" autocomplete="off" type="text" name="qtd_estoque" class="form-control mt-3">
+            <input placeholder="carregar imagem" autocomplete="off" type="file" name="image" class="form-control mt-3">
             <input type="submit" class="btn btn-success mt-3" value="Cadastrar">
         </form>
     </div>

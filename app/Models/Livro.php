@@ -14,7 +14,8 @@ class Livro extends Model
         'ano_publicacao',
         'categoria',
         'qtd_estoque',
-        'total_locacoes'
+        'total_locacoes',
+        'url_image'
     ];
 
     public function locacao(){

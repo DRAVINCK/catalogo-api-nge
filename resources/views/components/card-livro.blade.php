@@ -2,7 +2,7 @@
 
 <div class="card h-100 shadow-sm">
     {{-- Imagem do Livro --}}
-    <img src="{{ $livro->imagem_url ?? 'https://via.placeholder.com/150x200?text=Sem+Capa' }}"
+    <img src="{{ $livro->url_image ?? 'https://pixabay.com/pt/photos/image-10129034/' }}"
          class="card-img-top"
          alt="{{ $livro->titulo }}"
          style="height: 250px; object-fit: cover;">

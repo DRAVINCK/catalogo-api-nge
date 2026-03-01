@@ -21,4 +21,10 @@ class Livro extends Model
     public function locacao(){
         return $this->belongsTo('App\Models\Locacao');
     }
+
+    public function fileValidade($file){
+        $typeExtension = ['jpg', 'jpeg', 'png', 'pdf'];
+
+
+    }
 }

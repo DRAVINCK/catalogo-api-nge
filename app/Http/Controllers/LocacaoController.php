@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Livro;
 use App\Models\locacao;
 use App\Models\Usuario;
+use Barryvdh\DomPDF\PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -95,9 +96,17 @@ class LocacaoController extends Controller
         return to_route('locacoes.index');
     }
 
-    public function relatorio(){
+    public function relatorio()
+    {
         $livros = Livro::all();
         $maislocados = Livro::orderBy('total_locacoes', 'desc')->take(5)->get();
         return view('locacao.relatorio', compact('maislocados', 'livros'));
+    }
+
+    public function generatePdf()
+    {
+        $maislocados = Livro::orderBy('total_locacoes', 'desc')->take(10)->get();
+        $pdf = PDF::loadView('locacao.relatorio-pdf', compact('maislocados'));
+        return $pdf->stream('relatorio_locacoes.pdf');
     }
 }

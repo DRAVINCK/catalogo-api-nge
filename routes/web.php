@@ -13,6 +13,10 @@ Route::get('/teste', function () {
     return view('teste');
 });
 
+Route::get('locacoes/relatorio', [LocacaoController::class, 'relatorio'])->name('locacoes.relatorio');
+
+Route::get('locacoes/generate', [LocacaoController::class, 'generatePdf'])-> name('locacoes.generatePdf');
+
 Route::resource('usuarios', UsuarioController::class);
 
 Route::resource('livros', LivroController::class);

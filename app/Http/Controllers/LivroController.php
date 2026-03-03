@@ -38,28 +38,40 @@ class LivroController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'image'          => [
-                'required',
-                'file',
-                'mimes:jpg,jpeg,png,pdf',
-                'max:2048'
-            ]
-        ]);
+        try {
 
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('livros', 'public');
+            $request->validate([
+                'image'          => [
+                    'required',
+                    'file',
+                    'mimes:jpg,jpeg,png,pdf',
+                    'max:2048'
+                ]
+            ]);
 
-            $url = Storage::url($path);
+            $path = Storage::disk('s3')->putFile($request->file('image'));
 
+            if (!$path) {
+                return response()->json(['error' => 'Falha ao salvar no S3']);
+
+            }
+
+            $url = Storage::disk('s3')->url($path);
+
+            $dados = $request->except('_token') + ['url_image' => $url];
+
+            Livro::create($dados);
+
+            return redirect()->route("livros.index")->with('sucesso', 'Livro cadastrado!');
+
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            return response()->json([
+                'error'   => 'Erro ao cadastrar livro',
+                'details' => $message,
+                'type'    => get_class($e)
+            ]);
         }
-
-        $dados = $request->except('_token') + ['url_image' => $url];
-
-        Livro::create($dados);
-
-        return redirect()->route("livros.index")->with('sucesso', 'Livro cadastrado!');
-
 
     }
 
@@ -76,6 +88,7 @@ class LivroController extends Controller
     {
         $livro = Livro::find($id);
         return view('livro.edit' , compact('livro'));
+
     }
 
     /**
@@ -83,22 +96,34 @@ class LivroController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        try {
+            $storage = Storage::disk('s3');
 
-        if ($request->hasFile('image')) {
+            if ($request->hasFile('image')) {
 
-            $imgAntiga = Livro::find($id)->url_image;
-            $imgAntiga = str_replace('/storage/', '', $imgAntiga);
-            Storage::disk('public')->delete($imgAntiga);
+                $imgAntiga = Livro::find($id)->url_image;
 
-            $path = $request->file('image')->store('livros', 'public');
+                $storage->delete(str_replace($storage->url(''), '', $imgAntiga));
 
-            $dados['url_image'] = Storage::url($path);;
+                $path = Storage::disk('s3')->putFile($request->file('image'));
 
+                $dados['url_image'] = Storage::disk('s3')->url($path);;
+
+            }
+
+            Livro::findOrFail($id)->update($dados);
+
+            return to_route('livros.index');
+
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            return response()->json([
+                'error'   => 'Erro ao atualizar livro',
+                'details' => $message,
+                'type'    => get_class($e)
+            ]);
         }
 
-        Livro::findOrFail($id)->update($dados);
-
-        return to_route('livros.index');
     }
 
     /**

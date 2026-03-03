@@ -105,7 +105,7 @@ class LivroController extends Controller
 
                 $storage->delete(str_replace($storage->url(''), '', $imgAntiga));
 
-                $path = Storage::disk('s3')->putFile($request->file('image'));
+                $path = $storage->putFile($request->file('image'));
 
                 $dados['url_image'] = Storage::disk('s3')->url($path);;
 
@@ -131,9 +131,12 @@ class LivroController extends Controller
      */
     public function destroy(string $id)
     {
+
+        $storage = Storage::disk('s3');
+
         $imgDelete = Livro::find($id)->url_image;
-        $imgDelete = str_replace('/storage/', '', $imgDelete);
-        Storage::disk('public')->delete($imgDelete);
+        $storage->delete(str_replace($storage->url(''), '', $imgDelete));
+
         Livro::destroy($id);
         return to_route('livros.index');
     }

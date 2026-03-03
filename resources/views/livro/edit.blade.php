@@ -2,12 +2,12 @@
     <div class="d-flex justify-content-end m-3 ">
         <a class="btn btn-sm btn-danger" href="{{route('livros.index')}}">Sair</a>
     </div>
-    <div class="d-flex container">
-        <form class="form mt-4" action="{{route('livros.update', $livro->id)}}" method="post">
+    <div class="container flex-control w-50">
+        <h1 class="">Editar Livro</h1>
+        <div class="border p-4 rounded">
+        <form class="form mt-4" action="{{route('livros.update', $livro->id)}}" method="post" enctype="multipart/form-data">
             @csrf
             @method('PUT')
-            <h1>Editar Livro</h1>
-            <div class="border p-4 rounded">
                 <label for="usuario">ISBN:</label>
                 <input value="{{ $livro->ISBN }}"
                        placeholder="Digite o ISBN"
@@ -57,14 +57,27 @@
                        name="qtd_estoque"
                        class="form-control mt-1 mb-2">
 
-                <input type="submit" class="btn btn-primary mt-1 mb-2" value="Atualizar">
+                <label for="usuario">Capa:</label>
+                <input value="{{ $livro->url_image }}"
+                       placeholder="Alterar imagem"
+                       autocomplete="off"
+                       type="file"
+                       name="image"
+                       class="form-control mt-1 mb-2">
+            <input type="submit" class="btn btn-primary mt-1 mb-2" value="Atualizar">
+
+
+        </form>
+            <div class="align-items-center d-flex gap-2">
+
                 <form action="{{route('livros.destroy', $livro->id )}}" method="post">
                     @csrf
                     @method('DELETE')
                     <button class="btn btn-sm btn-danger mt-1 mb-2" type="submit" >Excluir</button>
                 </form>
             </div>
+        </div>
 
-        </form>
+
     </div>
 </x-layout>

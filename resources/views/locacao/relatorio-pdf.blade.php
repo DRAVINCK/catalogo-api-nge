@@ -10,7 +10,7 @@
                     Titulo: {{ $livro->titulo }} |
                     Autor: {{ $livro->autor }} |
                     Ano: {{ $livro->ano_publicacao }} |
-                    <span class="badge bg-primary rounded">{{ $livro->total_locacoes }} locacoes</span>
+                    <span class="badge bg-primary rounded">Quantidade locado: {{ $livro->total_locacoes }}</span>
                 </li>
                 @endforeach
             </ul>

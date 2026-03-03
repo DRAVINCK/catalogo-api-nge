@@ -4,6 +4,9 @@
     </div>
     <div class="container">
         <h1>listar Livros</h1>
+        @error('')
+            {{ $message }}
+        @enderror
         <form action="{{ route('livros.index') }}" method="GET" class="flex gap-2">
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Pesquisar..." class="border p-2 rounded">
             <select name="filtro" class="border p-2 rounded">

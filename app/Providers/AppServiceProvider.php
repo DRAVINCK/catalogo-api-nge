@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Livro;
+use App\Models\Usuario;
 use App\Observer\LivroObserver;
+use App\Observer\UsuarioObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -22,5 +24,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Livro::observe(LivroObserver::class);
+        Usuario::observe(UsuarioObserver::class);
     }
 }

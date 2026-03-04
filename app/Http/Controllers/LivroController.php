@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Livro;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class LivroController extends Controller
@@ -13,17 +14,21 @@ class LivroController extends Controller
      */
     public function index(Request $request)
     {
+        $livros = Cache::remember('livros', 120, function () {
+            return Livro::all();
+        });
+
+
         $searchCondicao = $request->input('search');
         $filtro = $request->input('filtro');
 
-        $query = Livro::query();
 
         if ($searchCondicao) {
-            $query->where($filtro, 'like', "%{$searchCondicao}%");
+            $livros = $livros->filter(function ($livro) use ($filtro, $searchCondicao) {
+                return str_contains(strtolower($livro->{$filtro}), strtolower($searchCondicao));
+            });
 
         }
-
-        $livros = $query->get();
 
         return view('livro.index', compact('livros'));
     }
@@ -80,8 +85,23 @@ class LivroController extends Controller
      */
     public function show(string $id)
     {
-        $livro = Livro::find($id);
-        return view('livro.show', compact('livro'));
+
+        try {
+            $livro = Cache::remember("livro_{$id}", 60, function () use ($id) {
+                return Livro::findOrFail($id);
+            });
+
+            return view('livro.show', compact('livro'));
+        }catch (\Exception $e) {
+            $message = $e->getMessage();
+            $file = $e->getFile();
+            return response()->json([
+                'error'   => 'Erro ao mostrar livro',
+                'details' => $message,
+                'type'    => get_class($e)
+            ]);
+        }
+
     }
 
     public function edit(string $id)

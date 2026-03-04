@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class locacao extends Model
+class Locacao extends Model
 {
     protected $fillable = [
         '_token',

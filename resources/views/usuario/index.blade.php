@@ -1,7 +1,7 @@
 <x-layout titulo="Pagina lista de Usuarios">
     <div class="d-flex justify-content-end m-2">
-        <a class="btn btn-sm btn-warning m-1" href="/home">Home</a>
-        <a class="btn btn-sm btn-primary m-1" href="{{route('livros.create')}}">Cadastrar</a>
+        <a class="btn btn-sm btn-warning m-1" href="/">Home</a>
+        <a class="btn btn-sm btn-primary m-1" href="{{route('usuarios.create')}}">Cadastrar</a>
     </div>
 
     <div class="container">

@@ -2,13 +2,16 @@
     <div class="d-flex justify-content-end m-3 ">
         <a class="btn btn-sm btn-danger" href="{{route('usuarios.index')}}">Sair</a>
     </div>
-    <div class="d-flex flex-column border rounded m-3 w-50 p-3">
-        <b>Nome: </b>
-        <p>{{ $usuario->nome }}</p>
-        <b>Email:</b>
-        <p>{{ $usuario->email }}</p>
-        <b>Telefone:</b>
-        <p>{{ $usuario->telefone }}</p>
+    <div class="container flex-control w-50">
+        <h1>Exibir Usuário</h1>
+        <div class="bg-white border p-4 roundedr">
+            <b>Nome: </b>
+            <p>{{ $usuario->nome }}</p>
+            <b>Email:</b>
+            <p>{{ $usuario->email }}</p>
+            <b>Telefone:</b>
+            <p>{{ $usuario->telefone }}</p>
+        </div>
     </div>
 </x-layout>
 

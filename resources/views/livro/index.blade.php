@@ -1,6 +1,7 @@
 <x-layout titulo="Pagina principal Livros">
-    <div class="d-flex justify-content-end m-3 ">
-        <a class="btn btn-sm btn-primary" href="{{route('livros.create')}}">Cadastrar</a>
+    <div class="d-flex justify-content-end m-2">
+        <a class="btn btn-sm btn-warning m-1" href="/home">Home</a>
+        <a class="btn btn-sm btn-primary m-1" href="{{route('livros.create')}}">Cadastrar</a>
     </div>
     <div class="container">
         <h1>listar Livros</h1>

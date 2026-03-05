@@ -1,37 +1,43 @@
 <x-layout titulo="Pagina principal Locacoes">
-    <div class="d-flex justify-content-end m-3 ">
-        <a class="btn btn-sm btn-primary" href="{{route('locacoes.create')}}">Locar</a>
+    <div class="d-flex justify-content-end m-2">
+        <a class="btn btn-sm btn-warning m-1" href="/home">Home</a>
+        <a class="btn btn-sm btn-primary m-1" href="{{route('locacoes.create')}}">Cadastrar</a>
     </div>
     <div class="container">
-        <h1>listar Locacoes</h1>
-        <a class="btn btn-sm btn-primary" href="{{route('locacoes.relatorio')}}">relatorio</a>
-        <table>
-            <thead>
-            <tr>
-                <th>Id</th>
-                <th>Usuario</th>
-                <th>livro</th>
-                <th>data_emprestimo</th>
-                <th>data_devolucao</th>
-                <th></th>
-
-            </tr>
-            </thead>
-            @foreach($locacoes as $locacao)
+        <div class="flex-row">
+            <h1>listar Locaçoes
+                <a class="btn btn-sm btn-primary" href="{{route('locacoes.relatorio')}}">Relatorio</a></h1>
+            </h1>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
                 <tr>
-                    <td>{{$locacao->id}}</td>
-                    <td>{{$locacao->usuario->nome}}</td>
-                    <td>{{$locacao->livro->titulo}}</td>
-                    <td>{{$locacao->data_emissao}}</td>
-                    <td>{{$locacao->data_vencimento}}</td>
-                    <td>
-                        <a href="{{ route('locacoes.show', $locacao->id) }}" >
-                            <button class="btn btn-sm btn-outline-primary w-100">Ver</button>
-                        </a>
-                    </td>
+                    <th class="text-center" >Id</th>
+                    <th class="text-center" >Usuario</th>
+                    <th class="text-center">livro</th>
+                    <th class="text-center">Data Emprestimo</th>
+                    <th class="text-center">Data Devolução</th>
+                    <th></th>
 
-                <tr>
-            @endforeach
-        </table>
+                </tr>
+                </thead>
+                @foreach($locacoes as $locacao)
+                    <tr>
+                        <td class="text-center">{{$locacao->id}}</td>
+                        <td class="text-center">{{$locacao->usuario->nome}}</td>
+                        <td class="text-center">{{$locacao->livro->titulo}}</td>
+                        <td class="text-center">{{$locacao->data_emissao->format('d/m/Y')}}</td>
+                        <td class="text-center">{{$locacao->data_vencimento->format('d/m/Y')}}</td>
+                        <td>
+                            <a href="{{ route('locacoes.show', $locacao->id) }}" >
+                                <button class="btn btn-sm btn-outline-primary w-100">Ver</button>
+                            </a>
+                        </td>
+
+                    <tr>
+                @endforeach
+            </table>
+        </div>
     </div>
 </x-layout>

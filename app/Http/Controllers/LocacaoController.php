@@ -92,8 +92,7 @@ class LocacaoController extends Controller
     {
         try {
             $locacao = Cache::remember("locacao_{$id}", 60, function () use ($id) {
-                Locacao::find($id);
-
+                return Locacao::findOrFail($id);
             });
 
             return view('locacao.show', compact('locacao'));
@@ -110,6 +109,7 @@ class LocacaoController extends Controller
     public function edit(string $id)
     {
         try {
+
             $locacao = Locacao::findOrFail($id);
             $usuarios = Usuario::all();
             $livros = Livro::all();

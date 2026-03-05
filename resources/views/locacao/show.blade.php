@@ -14,7 +14,11 @@
             <b>Data_devolucao</b>
             <p>{{ $locacao->data_vencimento }}</p>
             <div class="d-flex justify-content-end">
-                <a class="btn btn-sm btn-success m-1" href="{{route('locacoes.destroy', $locacao->id)}}">Registrar devolução</a>
+                <form action="{{route('locacoes.destroy', $locacao->id )}}" method="post">
+                    @csrf
+                    @method('DELETE')
+                    <button class="btn btn-sm btn-success mt-1" type="submit" >Registrar Devolução</button>
+                </form>
                 <a class="btn btn-sm btn-warning m-1" href="{{route('locacoes.edit', $locacao->id)}}">editar</a>
             </div>
 

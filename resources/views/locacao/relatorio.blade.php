@@ -4,7 +4,7 @@
     </div>
     <div class="container">
         <div class="flex-row">
-            <h1>Relatorio de locacoes
+            <h1>Relatorio de locações
                 <a class="btn btn-sm btn-danger" href="{{route('locacoes.generatePdf')}}">PDF</a></h1>
         </div>
         <table>

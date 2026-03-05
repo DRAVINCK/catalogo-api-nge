@@ -62,26 +62,31 @@ class LocacaoController extends Controller
     public function store(Request $request)
     {
         try {
+            $livro = Livro::findOrFail($request->input('livro_id'));
 
-            $livro = Livro::find($request->input('livro_id'));
             if ($livro->qtd_estoque <= 0) {
                 return redirect()->back()
-                    ->with(['error', 'Livro indisponível para locação.'])
+                    ->withErrors(['estoque' => 'Livro indisponível para locação'])
                     ->withInput();
-
             }
 
-            Locacao::create($request->except('_token'));
+
+            Locacao::create([
+                'livro_id' => $request->livro_id,
+                'usuario_id' => $request->usuario_id,
+                'data_emissao' => $request->data_emissao,
+                'data_vencimento' => $request->data_vencimento,
+            ]);
+
             $livro->qtd_estoque -= 1;
             $livro->total_locacoes += 1;
             $livro->save();
 
-            return to_route("locacoes.index");
+            return to_route("locacoes.index")->with('mensagem.sucesso', 'Locação realizada!');
 
-        }catch (\Exception $e){
-            $mensagem = $e->getMessage();
-            Log::error($mensagem);
-            response()->json([ 'mensagem' => $mensagem]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Falha ao salvar: ' . $e->getMessage()]);
         }
     }
 
@@ -148,7 +153,7 @@ class LocacaoController extends Controller
         try {
             $locacao = Locacao::find($id);
             $livro = Livro::find($locacao->livro_id);
-            $livro->qtd_estoque += 1;
+            $livro->qtd_estoque -= 1;
             $livro->save();
             Locacao::destroy($id);
             return to_route('locacoes.index');

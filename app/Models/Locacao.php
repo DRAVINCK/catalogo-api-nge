@@ -8,7 +8,7 @@ class Locacao extends Model
 {
     protected $fillable = [
         '_token',
-        'Usuario_id',
+        'usuario_id',
         'livro_id',
         'data_emissao',
         'data_vencimento',

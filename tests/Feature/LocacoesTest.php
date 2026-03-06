@@ -45,7 +45,8 @@ class LocacoesTest extends TestCase
             'data_vencimento' => now()->addDays(7),
         ]);
 
-        $livro->refresh();
+        $livro->qtd_estoque -= 1;
+        $livro->total_locacoes += 1;
 
         $response = $this->get('/locacoes');
 

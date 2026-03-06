@@ -162,12 +162,14 @@ class LocacaoController extends Controller
     {
         try {
 
-
             $livros = Cache::remember('livros', 60, function () {
                 return Livro::all();
             });
             $maislocados = Cache::remember('relatorio:mais_locados', 60, function () {
-                return Livro::orderBy('total_locacoes', 'desc')->take(10)->get();
+                return Livro::with('ultimaLocacao.usuario')
+                    ->orderBy('total_locacoes', 'desc')
+                    ->take(10)
+                    ->get();
             });
 
             return view('locacao.relatorio', compact('maislocados', 'livros'));

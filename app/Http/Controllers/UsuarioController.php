@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class UsuarioController extends Controller
 {
@@ -19,9 +20,9 @@ class UsuarioController extends Controller
             });
             return view('usuario.index', compact('usuarios'));
 
-        }catch (\Exception $e){
-            $message = $e->getMessage();
-            response()->json(['error' => $message]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Falha ao exibir index: ' . $e->getMessage()]);
         }
 
     }
@@ -42,9 +43,9 @@ class UsuarioController extends Controller
 
             return to_route('usuarios.index');
 
-        }catch (\Exception $e){
-            $message = $e->getMessage();
-            response()->json(['error' => $message]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Falha ao criar o usuario: ' . $e->getMessage()]);
         }
     }
 
@@ -60,9 +61,9 @@ class UsuarioController extends Controller
                 return Usuario::FindOrFail($id);
             });
 
-        }catch (\Exception $e){
-            $message = $e->getMessage();
-            response()->json(['error' => $message]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return redirect()->back()->withErrors(['error' => "Falha ao exibir o {$id} : " . $e->getMessage()]);
         }
 
 
@@ -77,9 +78,9 @@ class UsuarioController extends Controller
 
             return view('usuario.edit' , compact('usuario'));
 
-        }catch (\Exception $e){
-            $message = $e->getMessage();
-            response()->json(['error' => $message]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Falha ao exibir editar: ' . $e->getMessage()]);
         }
     }
 
@@ -94,9 +95,9 @@ class UsuarioController extends Controller
 
             return to_route('usuarios.index');
 
-        }catch (\Exception $e){
-            $message = $e->getMessage();
-            response()->json(['error' => $message]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Falha ao salvar edicao: ' . $e->getMessage()]);
         }
     }
 
@@ -111,9 +112,9 @@ class UsuarioController extends Controller
 
             return to_route('usuarios.index');
 
-        }catch (\Exception $e){
-            $message = $e->getMessage();
-            response()->json(['error' => $message]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Falha ao deletar: ' . $e->getMessage()]);
         }
 
     }

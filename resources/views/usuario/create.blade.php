@@ -17,8 +17,8 @@
                 @csrf
                 <h1>Criar Usuario</h1>
                 <input placeholder="Informe um Nome" autocomplete="off"  type="text" name="nome" class="form-control mt-3">
-                <input placeholder="Informe um Email" autocomplete="off" type="text" name="email" class="form-control mt-3">
-                <input placeholder="Informe um Telefone" autocomplete="off" type="text" name="telefone" class="form-control mt-3">
+                <input placeholder="Informe um Email" autocomplete="off" type="email" name="email" class="form-control mt-3">
+                <input placeholder="Informe um Telefone" autocomplete="off" type="text" name="telefone" maxlength="12" class="form-control mt-3">
                 <input type="submit" class="btn btn-success mt-3" value="Cadastrar">
             </form>
         </div>

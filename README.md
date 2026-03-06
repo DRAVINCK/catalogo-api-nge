@@ -12,6 +12,10 @@
 ## 2. Config do projeto
 
 #### 1. Clonar o repositório.
+````aiignore
+git clone https://github.com/DRAVINCK/catalogo-api-nge.git
+````
+
 #### 2. Instalar depend do PHP.
 ````aiignore
 composer install

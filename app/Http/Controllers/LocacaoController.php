@@ -31,10 +31,9 @@ class LocacaoController extends Controller
 
             return view('locacao.index', compact('locacoes', 'livros', 'usuarios'));
 
-        }catch (\Exception $e){
-            $mensagem = $e->getMessage();
-            Log::error($mensagem);
-            response()->json([ 'mensagem' => $mensagem]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'falha ao mostrar: ' . $e->getMessage()]);
         }
 
     }
@@ -49,10 +48,9 @@ class LocacaoController extends Controller
             $livros = Livro::all();
             return view('locacao.create', compact('usuarios', 'livros'));
 
-        }catch (\Exception $e){
-            $mensagem = $e->getMessage();
-            Log::error($mensagem);
-            response()->json([ 'mensagem' => $mensagem]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Falha na create: ' . $e->getMessage()]);
         }
     }
 
@@ -101,10 +99,9 @@ class LocacaoController extends Controller
             });
 
             return view('locacao.show', compact('locacao'));
-        }catch (\Exception $e){
-            $mensagem = $e->getMessage();
-            Log::error($mensagem);
-            response()->json([ 'mensagem' => $mensagem]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return redirect()->back()->withErrors(['error' => "Falha ao mostrar detalhes de {$id}: " . $e->getMessage()]);
         }
     }
 
@@ -119,11 +116,9 @@ class LocacaoController extends Controller
             $usuarios = Usuario::all();
             $livros = Livro::all();
             return view('locacao.edit', compact('locacao', 'usuarios', 'livros'));
-        }
-        catch (\Exception $e){
-            $mensagem = $e->getMessage();
-            Log::error($mensagem);
-            response()->json([ 'mensagem' => $mensagem]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Falha ao exibir edicao: ' . $e->getMessage()]);
         }
 
     }
@@ -137,10 +132,9 @@ class LocacaoController extends Controller
             Locacao::find($id)->update($request->except('_token'));
             return to_route('locacoes.index');
 
-        }catch (\Exception $e){
-            $mensagem = $e->getMessage();
-            Log::error($mensagem);
-            response()->json([ 'mensagem' => $mensagem]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Falha ao salvar ediçao: ' . $e->getMessage()]);
         }
 
     }
@@ -158,10 +152,9 @@ class LocacaoController extends Controller
             Locacao::destroy($id);
             return to_route('locacoes.index');
 
-        }catch (\Exception $e){
-            $mensagem = $e->getMessage();
-            Log::error($mensagem);
-            response()->json([ 'mensagem' => $mensagem]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Falha ao excluir: ' . $e->getMessage()]);
         }
     }
 
@@ -173,29 +166,31 @@ class LocacaoController extends Controller
             $livros = Cache::remember('livros', 60, function () {
                 return Livro::all();
             });
-            $maislocados = Cache::remember('total_locacoes', 60, function (){
+            $maislocados = Cache::remember('relatorio:mais_locados', 60, function () {
                 return Livro::orderBy('total_locacoes', 'desc')->take(10)->get();
             });
 
             return view('locacao.relatorio', compact('maislocados', 'livros'));
-        }catch (\Exception $e){
-            $mensagem = $e->getMessage();
-            Log::error($mensagem);
-            response()->json([ 'mensagem' => $mensagem]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Falha ao exibir relatorio: ' . $e->getMessage()]);
         }
     }
 
     public function generatePdf()
     {
         try {
-            $maislocados = Livro::orderBy('total_locacoes', 'desc')->take(10)->get();
+            $maislocados = Livro::with('ultimaLocacao.usuario')
+            ->orderBy('total_locacoes', 'desc')
+                ->take(10)
+                ->get();
+
             $pdf = PDF::loadView('locacao.relatorio-pdf', compact('maislocados'));
             return $pdf->stream('relatorio_locacoes.pdf');
 
-        }catch (\Exception $e){
-            $mensagem = $e->getMessage();
-            Log::error($mensagem);
-            response()->json([ 'mensagem' => $mensagem]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Falha gerar pdf: ' . $e->getMessage()]);
         }
     }
 }

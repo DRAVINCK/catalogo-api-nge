@@ -4,6 +4,15 @@
         <a class="btn btn-sm btn-primary m-1" href="{{route('locacoes.create')}}">Cadastrar</a>
     </div>
     <div class="container">
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="flex-row">
             <h1>listar Locaçoes
                 <a class="btn btn-sm btn-primary" href="{{route('locacoes.relatorio')}}">Relatorio</a></h1>

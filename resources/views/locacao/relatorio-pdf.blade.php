@@ -31,8 +31,9 @@
     <tr>
         <th>Título</th>
         <th>Autor</th>
-        <th class="text-center">Ano</th>
+        <th class="text-center">Categoria</th>
         <th class="text-center">Total Locações</th>
+        <th class="text-center">Ultima Locação</th>
     </tr>
     </thead>
     <tbody>
@@ -40,10 +41,16 @@
         <tr>
             <td>{{ $livro->titulo }}</td>
             <td>{{ $livro->autor }}</td>
-            <td class="text-center">{{ $livro->ano_publicacao }}</td>
+            <td class="text-center">{{ $livro->categoria }}</td>
+            <td class="text-center">{{ $livro->total_locacoes }}</td>
             <td class="text-center">
-                <span class="badge">{{ $livro->total_locacoes }}</span>
+                @if($livro->ultimaLocacao)
+                    {{ $livro->ultimaLocacao->data_emissao->format('d/m/Y') }}
+                @else
+                    -
+                @endif
             </td>
+
         </tr>
     @endforeach
     </tbody>

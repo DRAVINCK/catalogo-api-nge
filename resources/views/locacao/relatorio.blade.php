@@ -2,6 +2,15 @@
     <div class="d-flex justify-content-end m-3 ">
         <a class="btn btn-sm btn-warning" href="{{route('locacoes.index')}}">voltar</a>
     </div>
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <div class="container">
         <div class="flex-row">
             <h1>Relatorio de locações

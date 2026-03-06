@@ -19,7 +19,7 @@ class Livro extends Model
     ];
 
     public function locacao(){
-        return $this->belongsTo('App\Models\Locacao');
+        return $this->hasMany(Locacao::class);
     }
 
     public function ultimaLocacao(){

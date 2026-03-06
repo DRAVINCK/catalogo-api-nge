@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Locacao extends Model
 {
@@ -20,10 +21,10 @@ class Locacao extends Model
     ];
 
     public function usuario(){
-        return $this->belongsTo('App\Models\Usuario');
+        return $this->BelongsTo(Usuario::class);
     }
 
     public function livro(){
-        return $this->belongsTo('App\Models\Livro');
+        return $this->BelongsTo(Livro::class);
     }
 }

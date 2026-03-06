@@ -1,4 +1,4 @@
-<x-layout titulo="exibir livro">
+<x-layout titulo="exibir Locacao">
     <div class="d-flex justify-content-end m-3 ">
         <a class="btn btn-sm btn-danger" href="{{route('locacoes.index')}}">Sair</a>
     </div>
@@ -19,9 +19,9 @@
             <b>livro: </b>
             <p>{{ $locacao->livro->titulo }}</p>
             <b>Data_emprestimo:</b>
-            <p>{{ $locacao->data_emissao }}</p>
+            <p>{{ $locacao->data_emissao->format('d/m/Y') }}</p>
             <b>Data_devolucao</b>
-            <p>{{ $locacao->data_vencimento }}</p>
+            <p>{{ $locacao->data_vencimento->format('d/m/Y') }}</p>
             <div class="d-flex justify-content-end">
                 <form action="{{route('locacoes.destroy', $locacao->id )}}" method="post">
                     @csrf

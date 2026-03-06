@@ -14,11 +14,11 @@
             </div>
         @endif
         <div class="flex-row">
-            <h1>listar Locaçoes
+            <h1>Lista de Locações
                 <a class="btn btn-sm btn-primary" href="{{route('locacoes.relatorio')}}">Relatorio</a></h1>
             </h1>
         </div>
-        <div class="table-responsive">
+        <div class="bg-white table-responsive">
             <table class="table table-hover">
                 <thead>
                 <tr>

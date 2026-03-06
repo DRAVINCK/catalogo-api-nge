@@ -46,13 +46,11 @@
             </form>
 
             <div class="align-items-center d-flex gap-2">
-
                 <form action="{{route('usuarios.destroy', $usuario->id)}}" method="post">
                     @csrf
                     @method('DELETE')
                     <input type="submit" class="btn btn-danger mt-1 mb-3" value="Deletar">
                 </form>
             </div>
-
-    </div>
+        </div>
 </x-layout>

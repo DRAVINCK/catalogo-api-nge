@@ -80,7 +80,7 @@ class LocacaoController extends Controller
             $livro->total_locacoes += 1;
             $livro->save();
 
-            return to_route("locacoes.index")->with('mensagem.sucesso', 'Locação realizada!');
+            return to_route("locacoes.index");
 
         } catch (\Exception $e) {
             Log::error($e->getMessage());

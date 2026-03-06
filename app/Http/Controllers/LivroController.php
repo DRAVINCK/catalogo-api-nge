@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Livro;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class LivroController extends Controller
@@ -14,23 +15,27 @@ class LivroController extends Controller
      */
     public function index(Request $request)
     {
-        $livros = Cache::remember('livros', 120, function () {
-            return Livro::all();
-        });
-
-
-        $searchCondicao = $request->input('search');
-        $filtro = $request->input('filtro');
-
-
-        if ($searchCondicao) {
-            $livros = $livros->filter(function ($livro) use ($filtro, $searchCondicao) {
-                return str_contains(strtolower($livro->{$filtro}), strtolower($searchCondicao));
+        try {
+            $livros = Cache::remember('livros', 120, function () {
+                return Livro::all();
             });
 
-        }
+            $searchCondicao = $request->input('search');
+            $filtro = $request->input('filtro');
 
-        return view('livro.index', compact('livros'));
+
+            if ($searchCondicao) {
+                $livros = $livros->filter(function ($livro) use ($filtro, $searchCondicao) {
+                    return str_contains(strtolower($livro->{$filtro}), strtolower($searchCondicao));
+                });
+
+            }
+            return view('livro.index', compact('livros'));
+
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Falha ao exibir livros: ' . $e->getMessage()]);
+        }
     }
 
     public function create()
@@ -70,12 +75,8 @@ class LivroController extends Controller
             return redirect()->route("livros.index")->with('sucesso', 'Livro cadastrado!');
 
         } catch (\Exception $e) {
-            $message = $e->getMessage();
-            return response()->json([
-                'error'   => 'Erro ao cadastrar livro',
-                'details' => $message,
-                'type'    => get_class($e)
-            ]);
+            Log::error($e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Falha ao criar Livro: ' . $e->getMessage()]);
         }
 
     }
@@ -92,22 +93,23 @@ class LivroController extends Controller
             });
 
             return view('livro.show', compact('livro'));
-        }catch (\Exception $e) {
-            $message = $e->getMessage();
-            $file = $e->getFile();
-            return response()->json([
-                'error'   => 'Erro ao mostrar livro',
-                'details' => $message,
-                'type'    => get_class($e)
-            ]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return redirect()->back()->withErrors(['error' => "Falha ao exibir o livro {$id}: " . $e->getMessage()]);
         }
 
     }
 
     public function edit(string $id)
     {
-        $livro = Livro::find($id);
-        return view('livro.edit' , compact('livro'));
+        try {
+            $livro = Livro::find($id);
+            return view('livro.edit' , compact('livro'));
+
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Falha no processo de edição: ' . $e->getMessage()]);
+        }
 
     }
 
@@ -117,31 +119,28 @@ class LivroController extends Controller
     public function update(Request $request, string $id)
     {
         try {
+            $livro = Livro::findOrFail($id);
             $storage = Storage::disk('s3');
 
+            $dados = $request->except(['_token', 'image']);
+
             if ($request->hasFile('image')) {
+                if ($livro->url_image) {
+                    $pathAntigo = str_replace($storage->url(''), '', $livro->url_image);
+                    $storage->delete($pathAntigo);
+                }
 
-                $imgAntiga = Livro::find($id)->url_image;
-
-                $storage->delete(str_replace($storage->url(''), '', $imgAntiga));
-
-                $path = $storage->putFile($request->file('image'));
-
-                $dados['url_image'] = Storage::disk('s3')->url($path);;
-
+                $pathNovo = $storage->putFile($request->file('image'));
+                $dados['url_image'] = $storage->url($pathNovo);
             }
 
-            Livro::findOrFail($id)->update($dados);
+            $livro->update($dados);
 
             return to_route('livros.index');
 
         } catch (\Exception $e) {
-            $message = $e->getMessage();
-            return response()->json([
-                'error'   => 'Erro ao atualizar livro',
-                'details' => $message,
-                'type'    => get_class($e)
-            ]);
+            Log::error($e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Falha ao salvar edicao: ' . $e->getMessage()]);
         }
 
     }
@@ -151,13 +150,17 @@ class LivroController extends Controller
      */
     public function destroy(string $id)
     {
+        try {
+            $storage = Storage::disk('s3');
 
-        $storage = Storage::disk('s3');
+            $imgDelete = Livro::find($id)->url_image;
+            $storage->delete(str_replace($storage->url(''), '', $imgDelete));
 
-        $imgDelete = Livro::find($id)->url_image;
-        $storage->delete(str_replace($storage->url(''), '', $imgDelete));
-
-        Livro::destroy($id);
-        return to_route('livros.index');
+            Livro::destroy($id);
+            return to_route('livros.index');
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Falha ao deletar livro: ' . $e->getMessage()]);
+        }
     }
 }

@@ -3,6 +3,15 @@
         <a class="btn btn-sm btn-warning m-1" href="/">Home</a>
         <a class="btn btn-sm btn-primary m-1" href="{{route('livros.create')}}">Cadastrar</a>
     </div>
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <div class="container">
         <h1>listar Livros</h1>
         @error('')

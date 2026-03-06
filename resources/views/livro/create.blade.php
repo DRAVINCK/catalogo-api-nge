@@ -2,6 +2,15 @@
     <div class="d-flex justify-content-end m-3 ">
         <a class="btn btn-sm btn-danger" href="{{route('livros.index')}}">Sair</a>
     </div>
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <div class=" container flex-control w-50">
         <div class="bg-white border p-4 rounded">
             <form class="form mt-4" action="{{route('livros.store')}}" method="post" enctype="multipart/form-data">

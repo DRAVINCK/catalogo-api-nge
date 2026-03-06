@@ -21,4 +21,8 @@ class Livro extends Model
     public function locacao(){
         return $this->belongsTo('App\Models\Locacao');
     }
+
+    public function ultimaLocacao(){
+        return $this->hasOne(Locacao::class)->latestOfMany(); // consulta dps https://laravel.com/docs/12.x/eloquent-relationships#has-one-of-many
+    }
 }

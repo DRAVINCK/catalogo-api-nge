@@ -21,12 +21,12 @@ git clone https://github.com/DRAVINCK/catalogo-api-nge.git
 composer install
 ````
 
-#### 3. Instalar depend do Front()
+#### 3. Instalar depend do Front(se necessario)
 ````aiignore
 npm install
 ````
 
-#### 4. Crie o arquivo .env baseado no .env.example e configurar as key (MySQL) e AWS S3.
+#### 4. Crie o arquivo .env baseado no .env.example e configurar a conexão com o banco(MySql), Cache(predis) e keys para AWS S3.
 
 
 ## 3. Outros ajustes

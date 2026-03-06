@@ -13,7 +13,7 @@
     @endif
     <div class="container flex-control w-50">
         <h1>Editar Livro</h1>
-        <div class="border p-4 rounded">
+        <div class="bg-white border p-4 rounded">
             <form class="form mt-1" action="{{route('livros.update', $livro->id)}}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')

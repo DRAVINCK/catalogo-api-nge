@@ -67,7 +67,7 @@ php artisan serve
 - **/locacoes/generate**: Gera PDF do ranking de locações.
 
 # Testes
-- Os testes utilizam SQLite (em memória ou arquivo).
+- Os testes utilizam SQLite (em memória ou arquivo) Lembre-se de criar seu (``.env.testing``) para usar o SQLite.
   Para rodar os testes:
 
 ```bash

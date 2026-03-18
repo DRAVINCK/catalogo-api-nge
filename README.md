@@ -4,7 +4,7 @@
 # Rodando o projeto
 
 ## 1. Requisitos
-- PHP 8.2 ou superior.
+- PHP 8.5 ou superior.
 - Composer.
 - Docker (para o Redis).
 - XAMPP (para mysql e apache).

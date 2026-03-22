@@ -16,21 +16,22 @@ class LivroController extends Controller
     public function index(Request $request)
     {
         try {
-            $livros = Cache::remember('livros', 120, function () {
-                return Livro::all();
-            });
 
-            $searchCondicao = $request->input('search');
+            $search = $request->input('search');
             $filtro = $request->input('filtro');
 
 
-            if ($searchCondicao) {
-                $livros = $livros->filter(function ($livro) use ($filtro, $searchCondicao) {
-                    return str_contains(strtolower($livro->{$filtro}), strtolower($searchCondicao));
-                });
+            if ($search && $filtro) {
+                $livros = Livro::where($filtro, 'like', "%{$search}%")->get();
 
+            }else{
+                $livros = Cache::remember('livros', 60, function () {
+                    return Livro::all();
+                });
             }
+
             return view('livro.index', compact('livros'));
+
 
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -50,16 +51,18 @@ class LivroController extends Controller
     {
         try {
 
-            $request->validate([
-                'image'          => [
-                    'required',
-                    'file',
-                    'mimes:jpg,jpeg,png,pdf',
-                    'max:2048'
-                ]
+             $requestValidate = $request->validate([
+                'ISBN' => 'required|unique:livros',
+                'titulo' => 'required|max:255',
+                'autor' => 'required',
+                'ano_publicacao' => 'nullable|integer|max_digits:4',
+                'categoria' => 'required',
+                'qtd_estoque' => 'required|integer|max_digits:6',
+                'image' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048'
             ]);
 
-            $path = Storage::disk('s3')->putFile($request->file('image'));
+
+            $path = Storage::disk('s3')->putFile($requestValidate['image']);
 
             if (!$path) {
                 return response()->json(['error' => 'Falha ao salvar no S3']);
@@ -68,7 +71,7 @@ class LivroController extends Controller
 
             $url = Storage::disk('s3')->url($path);
 
-            $dados = $request->except('_token') + ['url_image' => $url];
+            $dados = $requestValidate + ['url_image' => $url];
 
             Livro::create($dados);
 

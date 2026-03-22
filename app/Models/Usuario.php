@@ -14,7 +14,7 @@ class Usuario extends Model
     ];
 
     public function locacao(){
-        return $this->belongsTo('App\Models\Locacao');
+        return $this->hasMany('App\Models\Locacao');
     }
 
 }

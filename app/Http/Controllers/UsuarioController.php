@@ -39,7 +39,15 @@ class UsuarioController extends Controller
     {
         try {
 
-            Usuario::create($request->except('_token'));
+            $requestValidate = $request->validate([
+                'nome' => 'required|max:255',
+                'email' => 'required',
+                'telefone' => 'required|min:9|max:12',
+            ]);
+
+
+
+            Usuario::create($requestValidate);
 
             return to_route('usuarios.index');
 

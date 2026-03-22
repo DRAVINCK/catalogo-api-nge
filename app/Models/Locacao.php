@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Locacao extends Model
 {
     protected $fillable = [
-        '_token',
         'usuario_id',
         'livro_id',
         'data_emissao',

@@ -4,7 +4,7 @@
 # Rodando o projeto
 
 ## 1. Requisitos
-- PHP 8.2 ou superior.
+- PHP 8.5 ou superior.
 - Composer.
 - Docker (para o Redis).
 - XAMPP (para mysql e apache).
@@ -21,12 +21,12 @@ git clone https://github.com/DRAVINCK/catalogo-api-nge.git
 composer install
 ````
 
-#### 3. Instalar depend do Front()
+#### 3. Instalar depend do Front(se necessario)
 ````aiignore
 npm install
 ````
 
-#### 4. Crie o arquivo .env baseado no .env.example e configurar as key (MySQL) e AWS S3.
+#### 4. Crie o arquivo .env baseado no .env.example e configurar a conexão com o banco(MySql), Cache(predis) e keys para AWS S3.
 
 
 ## 3. Outros ajustes
@@ -67,7 +67,7 @@ php artisan serve
 - **/locacoes/generate**: Gera PDF do ranking de locações.
 
 # Testes
-- Os testes utilizam SQLite (em memória ou arquivo).
+- Os testes utilizam SQLite (em memória ou arquivo) Lembre-se de criar seu (``.env.testing``) para usar o SQLite.
   Para rodar os testes:
 
 ```bash

@@ -29,6 +29,8 @@ class LocacaoController extends Controller
                 return Usuario::all();
             });
 
+
+
             return view('locacao.index', compact('locacoes', 'livros', 'usuarios'));
 
         } catch (\Exception $e) {
@@ -60,25 +62,27 @@ class LocacaoController extends Controller
     public function store(Request $request)
     {
         try {
-            $livro = Livro::findOrFail($request->input('livro_id'));
 
-            if ($livro->qtd_estoque <= 0) {
-                return redirect()->back()
-                    ->withErrors(['estoque' => 'Livro indisponível para locação'])
-                    ->withInput();
-            }
+            DB::transaction(function () use ($request) {
 
+                $livro = Livro::where('id', $request->livro_id)->lockForUpdate()->first();
 
-            Locacao::create([
-                'livro_id' => $request->livro_id,
-                'usuario_id' => $request->usuario_id,
-                'data_emissao' => $request->data_emissao,
-                'data_vencimento' => $request->data_vencimento,
-            ]);
+                if ($livro->qtd_estoque <= 0) {
+                    throw new \Exception("Estoque vazio");
+                }
 
-            $livro->qtd_estoque -= 1;
-            $livro->total_locacoes += 1;
-            $livro->save();
+                Locacao::create([
+                    'livro_id' => $request->livro_id,
+                    'usuario_id' => $request->usuario_id,
+                    'data_emissao' => $request->data_emissao,
+                    'data_vencimento' => $request->data_vencimento,
+                ]);
+
+                $livro->qtd_estoque -= 1;
+                $livro->total_locacoes += 1;
+                $livro->save();
+
+            });
 
             return to_route("locacoes.index");
 
@@ -147,7 +151,7 @@ class LocacaoController extends Controller
         try {
             $locacao = Locacao::find($id);
             $livro = Livro::find($locacao->livro_id);
-            $livro->qtd_estoque -= 1;
+            $livro->qtd_estoque += 1;
             $livro->save();
             Locacao::destroy($id);
             return to_route('locacoes.index');
